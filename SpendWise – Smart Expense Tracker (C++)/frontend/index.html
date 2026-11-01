@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SpendWise | Smart Expense Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-icon">S</span><div><b>SpendWise</b><small>PERSONAL FINANCE</small></div></div>
+    <div class="nav-label">WORKSPACE</div>
+    <button class="nav active" data-view="overview">▦ <span>Overview</span></button>
+    <button class="nav" data-view="transactions">⇄ <span>Transactions</span></button>
+    <button class="nav" data-view="budgets">◷ <span>Budgets</span></button>
+    <div class="sidebar-bottom"><div class="avatar">SW</div><div><b>Personal Account</b><small>Local workspace</small></div></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><span class="eyebrow">PERSONAL FINANCE</span><h1 id="pageTitle">Overview</h1></div><div class="top-right"><span class="local-pill"><i></i> Offline storage</span><div class="avatar">SW</div></div></header>
+    <section id="overviewView">
+      <div class="welcome"><div><span class="eyebrow light">YOUR FINANCIAL SNAPSHOT</span><h2>Take control of your money.</h2><p>Understand your spending. Build better habits.</p></div><div class="welcome-mark">↗</div></div>
+      <div class="stat-grid">
+        <article class="stat"><div class="stat-top"><span>Total balance</span><span class="stat-icon purple">₹</span></div><h2 id="balance">₹0.00</h2><small>Income minus expenses</small></article>
+        <article class="stat"><div class="stat-top"><span>Total income</span><span class="stat-icon green">↗</span></div><h2 id="income">₹0.00</h2><small>All recorded income</small></article>
+        <article class="stat"><div class="stat-top"><span>Total expenses</span><span class="stat-icon red">↘</span></div><h2 id="expense">₹0.00</h2><small>All recorded expenses</small></article>
+        <article class="stat"><div class="stat-top"><span>This month</span><span class="stat-icon orange">◷</span></div><h2 id="monthBalance">₹0.00</h2><small id="monthLabel">Monthly net balance</small></article>
+      </div>
+      <div class="content-grid">
+        <section class="panel"><div class="panel-head"><div><h3>Monthly cash flow</h3><p>Income vs expenses this month</p></div><span class="tag">CURRENT MONTH</span></div><div class="chart-wrap"><canvas id="flowChart"></canvas></div><div class="legend"><span><i class="dot income-dot"></i> Income</span><span><i class="dot expense-dot"></i> Expenses</span></div></section>
+        <section class="panel"><div class="panel-head"><div><h3>Quick action</h3><p>Record a financial activity</p></div></div><button class="quick-action" id="quickIncome"><span class="quick-icon plus">＋</span><span><b>Add income</b><small>Record money received</small></span><span class="arrow">→</span></button><button class="quick-action" id="quickExpense"><span class="quick-icon minus">－</span><span><b>Add expense</b><small>Record money spent</small></span><span class="arrow">→</span></button><div class="tip"><b>✦ Smart tip</b><p>Recording expenses regularly helps you understand your spending habits and plan your budget.</p></div></section>
+      </div>
+      <section class="panel recent"><div class="panel-head"><div><h3>Recent transactions</h3><p>Your latest financial activities</p></div><button class="text-btn" id="viewAll">View all →</button></div><div id="recentList"></div></section>
+    </section>
+    <section id="transactionsView" class="hidden">
+      <section class="panel"><div class="panel-head"><div><h3>All transactions</h3><p>Review and manage your income and expenses</p></div><button class="primary" id="newTransaction">＋ Add transaction</button></div><div class="toolbar"><input id="searchTransactions" placeholder="Search category or note..."><select id="filterType"><option value="all">All types</option><option value="income">Income</option><option value="expense">Expenses</option></select></div><div id="transactionList"></div></section>
+    </section>
+    <section id="budgetsView" class="hidden">
+      <section class="panel"><div class="panel-head"><div><h3>Monthly budgets</h3><p>Set spending limits for each category</p></div><button class="primary" id="newBudget">＋ Set budget</button></div><div id="budgetList"></div></section>
+    </section>
+    <footer>SpendWise · C++ File-Based Finance Manager <span>Data stays on this computer</span></footer>
+  </main>
+  <div class="modal-backdrop hidden" id="transactionModal"><div class="modal"><div class="modal-head"><div><span class="eyebrow">NEW RECORD</span><h2>Add transaction</h2></div><button class="close" data-close="transactionModal">×</button></div><form id="transactionForm"><label>Transaction type</label><div class="type-switch"><button type="button" class="type-btn selected" data-type="expense">Expense</button><button type="button" class="type-btn" data-type="income">Income</button></div><input type="hidden" id="txType" value="expense"><label>Category</label><select id="txCategory" required><option>Food</option><option>Transport</option><option>Shopping</option><option>Bills</option><option>Education</option><option>Health</option><option>Entertainment</option><option>Salary</option><option>Freelance</option><option>Other</option></select><label>Amount (₹)</label><input id="txAmount" type="number" min="0.01" step="0.01" placeholder="e.g. 500" required><label>Date</label><input id="txDate" type="date" required><label>Note</label><input id="txNote" maxlength="120" placeholder="Add a short description"><div class="form-actions"><button type="button" class="secondary" data-close="transactionModal">Cancel</button><button class="primary" type="submit">Save transaction</button></div></form></div></div>
+  <div class="modal-backdrop hidden" id="budgetModal"><div class="modal"><div class="modal-head"><div><span class="eyebrow">MONTHLY PLANNING</span><h2>Set a budget</h2></div><button class="close" data-close="budgetModal">×</button></div><form id="budgetForm"><label>Category</label><select id="budgetCategory"><option>Food</option><option>Transport</option><option>Shopping</option><option>Bills</option><option>Education</option><option>Health</option><option>Entertainment</option><option>Other</option></select><label>Month</label><input id="budgetMonth" type="month" required><label>Budget amount (₹)</label><input id="budgetAmount" type="number" min="0.01" step="0.01" required placeholder="e.g. 5000"><div class="form-actions"><button type="button" class="secondary" data-close="budgetModal">Cancel</button><button class="primary">Save budget</button></div></form></div></div>
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
